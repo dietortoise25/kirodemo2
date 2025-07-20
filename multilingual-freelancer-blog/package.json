@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "vite --host",
-    "dev:frontend": "vite --host --port 9000",
-    "dev:backend": "tsx server.js",
+    "dev:frontend": "vite --host --port 5001",
+    "dev:backend": "tsx server.ts",
     "dev:full": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

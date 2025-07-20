@@ -204,12 +204,14 @@ export class ContentApi {
 
   /**
    * 更新内容翻译
-   * @param id 翻译ID
+   * @param contentId 内容ID
+   * @param language 语言
    * @param data 更新数据
    * @returns Promise<ContentTranslation | null> 更新后的翻译对象或null
    */
   public static async updateContentTranslation(
-    id: string,
+    contentId: string,
+    language: Language,
     data: {
       title?: string;
       content?: string;
@@ -217,23 +219,34 @@ export class ContentApi {
     }
   ): Promise<ContentTranslation | null> {
     try {
-      return await prismaService.updateContentTranslation(id, data);
+      // 先获取现有的翻译
+      const existingTranslation = await prismaService.getContentTranslation(contentId, language);
+      if (!existingTranslation) {
+        throw new Error('Translation not found');
+      }
+      return await prismaService.updateContentTranslation(existingTranslation.id, data);
     } catch (error) {
-      console.error(`更新内容翻译失败 (ID: ${id}):`, error);
+      console.error(`更新内容翻译失败 (ContentID: ${contentId}, Language: ${language}):`, error);
       throw new Error('更新内容翻译失败');
     }
   }
 
   /**
    * 删除内容翻译
-   * @param id 翻译ID
+   * @param contentId 内容ID
+   * @param language 语言
    * @returns Promise<boolean> 是否删除成功
    */
-  public static async deleteContentTranslation(id: string): Promise<boolean> {
+  public static async deleteContentTranslation(contentId: string, language: Language): Promise<boolean> {
     try {
-      return await prismaService.deleteContentTranslation(id);
+      // 先获取现有的翻译
+      const existingTranslation = await prismaService.getContentTranslation(contentId, language);
+      if (!existingTranslation) {
+        throw new Error('Translation not found');
+      }
+      return await prismaService.deleteContentTranslation(existingTranslation.id);
     } catch (error) {
-      console.error(`删除内容翻译失败 (ID: ${id}):`, error);
+      console.error(`删除内容翻译失败 (ContentID: ${contentId}, Language: ${language}):`, error);
       throw new Error('删除内容翻译失败');
     }
   }
