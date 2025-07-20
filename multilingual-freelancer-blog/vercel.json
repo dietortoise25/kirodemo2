@@ -1,7 +1,7 @@
 {
   "version": 2,
   "framework": "vite",
-  "buildCommand": "pnpm run build",
+  "buildCommand": "pnpm run vercel:build",
   "outputDirectory": "dist",
   "routes": [
     { "handle": "filesystem" },
@@ -16,4 +16,4 @@
     "VITE_AVAILABLE_LANGUAGES": "zh,en",
     "VITE_SITE_NAME": "Multilingual Freelancer Blog"
   }
-} 
+}

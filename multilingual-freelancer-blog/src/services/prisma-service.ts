@@ -20,7 +20,7 @@ export class PrismaService {
     });
 
     // 转换为应用类型
-    return contents.map(content => ({
+    return contents.map((content: any) => ({
       id: content.id,
       userId: content.userId,
       slug: content.slug,
@@ -29,7 +29,7 @@ export class PrismaService {
       publishedAt: content.publishedAt?.toISOString() || null,
       createdAt: content.createdAt.toISOString(),
       updatedAt: content.updatedAt.toISOString(),
-      translations: content.translations.map(translation => ({
+      translations: content.translations.map((translation: any) => ({
         id: translation.id,
         contentId: translation.contentId,
         language: translation.language as Language,
@@ -75,7 +75,7 @@ export class PrismaService {
     ]);
 
     // 转换为应用类型
-    const formattedContents = contents.map(content => ({
+    const formattedContents = contents.map((content: any) => ({
       id: content.id,
       userId: content.userId,
       slug: content.slug,
@@ -84,7 +84,7 @@ export class PrismaService {
       publishedAt: content.publishedAt?.toISOString() || null,
       createdAt: content.createdAt.toISOString(),
       updatedAt: content.updatedAt.toISOString(),
-      translations: content.translations.map(translation => ({
+      translations: content.translations.map((translation: any) => ({
         id: translation.id,
         contentId: translation.contentId,
         language: translation.language as Language,
@@ -130,7 +130,7 @@ export class PrismaService {
       publishedAt: content.publishedAt?.toISOString() || null,
       createdAt: content.createdAt.toISOString(),
       updatedAt: content.updatedAt.toISOString(),
-      translations: content.translations.map(translation => ({
+      translations: content.translations.map((translation: any) => ({
         id: translation.id,
         contentId: translation.contentId,
         language: translation.language as Language,
@@ -169,7 +169,7 @@ export class PrismaService {
       publishedAt: content.publishedAt?.toISOString() || null,
       createdAt: content.createdAt.toISOString(),
       updatedAt: content.updatedAt.toISOString(),
-      translations: content.translations.map(translation => ({
+      translations: content.translations.map((translation: any) => ({
         id: translation.id,
         contentId: translation.contentId,
         language: translation.language as Language,
@@ -249,7 +249,7 @@ export class PrismaService {
       publishedAt: content.publishedAt?.toISOString() || null,
       createdAt: content.createdAt.toISOString(),
       updatedAt: content.updatedAt.toISOString(),
-      translations: content.translations.map(translation => ({
+      translations: content.translations.map((translation: any) => ({
         id: translation.id,
         contentId: translation.contentId,
         language: translation.language as Language,
@@ -419,8 +419,8 @@ export class PrismaService {
     });
 
     return contents
-      .filter(content => content.translations.length > 0)
-      .map(content => ({
+      .filter((content: any) => content.translations.length > 0)
+      .map((content: any) => ({
         id: content.id,
         userId: content.userId,
         slug: content.slug,
@@ -429,7 +429,7 @@ export class PrismaService {
         publishedAt: content.publishedAt?.toISOString() || null,
         createdAt: content.createdAt.toISOString(),
         updatedAt: content.updatedAt.toISOString(),
-        translations: content.translations.map(translation => ({
+        translations: content.translations.map((translation: any) => ({
           id: translation.id,
           contentId: translation.contentId,
           language: translation.language as Language,
