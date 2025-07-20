@@ -219,9 +219,11 @@ export function useContent() {
         await HttpContentApi.createContentTranslation(
           newContent.id,
           defaultLanguage,
-          title,
-          content,
-          seoMetadata
+          {
+            title,
+            content,
+            seoMetadata
+          }
         );
 
         return newContent;

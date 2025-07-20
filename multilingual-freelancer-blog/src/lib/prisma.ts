@@ -5,6 +5,13 @@ if (typeof window !== 'undefined') {
 
 import { PrismaClient } from '../../generated/prisma';
 
+// 声明process类型
+declare const process: {
+  env: {
+    NODE_ENV?: string;
+  };
+};
+
 // 创建一个全局的Prisma实例
 let prisma: PrismaClient;
 

@@ -103,12 +103,9 @@ export class PrismaService {
 
     return {
       contents: formattedContents,
-      pagination: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
+      total,
+      page,
+      pageSize: limit,
     };
   }
 
@@ -369,6 +366,85 @@ export class PrismaService {
       where: { id },
     });
     return true;
+  }
+
+  // 获取内容翻译
+  public async getContentTranslation(contentId: string, language: Language) {
+    const translation = await prisma.contentTranslation.findUnique({
+      where: {
+        contentId_language: {
+          contentId,
+          language,
+        },
+      },
+    });
+
+    if (!translation) return null;
+
+    return {
+      id: translation.id,
+      contentId: translation.contentId,
+      language: translation.language as Language,
+      title: translation.title,
+      content: translation.content,
+      seoMetadata: {
+        title: translation.seoTitle,
+        description: translation.seoDesc,
+        keywords: translation.seoKeywords.split(','),
+        ogImage: translation.ogImage || undefined,
+      },
+      createdAt: translation.createdAt.toISOString(),
+      updatedAt: translation.updatedAt.toISOString(),
+    };
+  }
+
+  // 获取相关内容
+  public async getRelatedContents(contentId: string, language: Language, limit: number = 3) {
+    const contents = await prisma.content.findMany({
+      where: {
+        id: { not: contentId },
+        published: true,
+      },
+      include: {
+        translations: {
+          where: {
+            language,
+          },
+        },
+      },
+      take: limit,
+      orderBy: {
+        publishedAt: 'desc',
+      },
+    });
+
+    return contents
+      .filter(content => content.translations.length > 0)
+      .map(content => ({
+        id: content.id,
+        userId: content.userId,
+        slug: content.slug,
+        defaultLanguage: content.defaultLanguage as Language,
+        published: content.published,
+        publishedAt: content.publishedAt?.toISOString() || null,
+        createdAt: content.createdAt.toISOString(),
+        updatedAt: content.updatedAt.toISOString(),
+        translations: content.translations.map(translation => ({
+          id: translation.id,
+          contentId: translation.contentId,
+          language: translation.language as Language,
+          title: translation.title,
+          content: translation.content,
+          seoMetadata: {
+            title: translation.seoTitle,
+            description: translation.seoDesc,
+            keywords: translation.seoKeywords.split(','),
+            ogImage: translation.ogImage || undefined,
+          },
+          createdAt: translation.createdAt.toISOString(),
+          updatedAt: translation.updatedAt.toISOString(),
+        })),
+      }));
   }
 
   // 初始化示例数据

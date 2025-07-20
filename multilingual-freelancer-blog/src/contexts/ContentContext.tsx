@@ -151,9 +151,11 @@ export function ContentProvider({ children }: ContentProviderProps) {
             await HttpContentApi.createContentTranslation(
                 newContent.id,
                 data.defaultLanguage,
-                data.title,
-                data.content,
-                data.seoMetadata
+                {
+                    title: data.title,
+                    content: data.content,
+                    seoMetadata: data.seoMetadata
+                }
             );
 
             return newContent;

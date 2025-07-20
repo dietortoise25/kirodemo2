@@ -162,9 +162,11 @@ export class ApiRoutes {
     const translation = await ContentApi.createContentTranslation(
       contentId,
       data.language,
-      data.title,
-      data.content,
-      data.seoMetadata
+      {
+        title: data.title,
+        content: data.content,
+        seoMetadata: data.seoMetadata
+      }
     );
     return new Response(JSON.stringify(translation), {
       status: 201,
@@ -182,7 +184,12 @@ export class ApiRoutes {
 
   private static async handleUpdateContentTranslation(contentId: string, language: Language, request: Request): Promise<Response> {
     const data = await request.json();
-    const translation = await ContentApi.updateContentTranslation(contentId, language, data);
+    // 首先获取翻译ID
+    const existingTranslation = await ContentApi.getContentTranslation(contentId, language);
+    if (!existingTranslation) {
+      return new Response('Translation not found', { status: 404 });
+    }
+    const translation = await ContentApi.updateContentTranslation(existingTranslation.id, data);
     return new Response(JSON.stringify(translation), {
       headers: { 'Content-Type': 'application/json' }
     });
@@ -196,7 +203,12 @@ export class ApiRoutes {
   }
 
   private static async handleDeleteContentTranslation(contentId: string, language: Language): Promise<Response> {
-    const success = await ContentApi.deleteContentTranslation(contentId, language);
+    // 首先获取翻译ID
+    const existingTranslation = await ContentApi.getContentTranslation(contentId, language);
+    if (!existingTranslation) {
+      return new Response('Translation not found', { status: 404 });
+    }
+    const success = await ContentApi.deleteContentTranslation(existingTranslation.id);
     return new Response(JSON.stringify({ success }), {
       headers: { 'Content-Type': 'application/json' }
     });

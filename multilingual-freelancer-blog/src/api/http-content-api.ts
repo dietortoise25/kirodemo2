@@ -154,9 +154,11 @@ export class HttpContentApi {
   static async createContentTranslation(
     contentId: string,
     language: Language,
-    title: string,
-    content: string,
-    seoMetadata: SeoMetadata
+    data: {
+      title: string;
+      content: string;
+      seoMetadata?: SeoMetadata;
+    }
   ): Promise<ContentTranslation> {
     const response = await fetch(
       `${this.baseUrl}/contents/${contentId}/translations`,
@@ -167,9 +169,9 @@ export class HttpContentApi {
         },
         body: JSON.stringify({
           language,
-          title,
-          content,
-          seoMetadata,
+          title: data.title,
+          content: data.content,
+          seoMetadata: data.seoMetadata,
         }),
       }
     );
@@ -209,8 +211,7 @@ export class HttpContentApi {
    * 更新内容翻译
    */
   static async updateContentTranslation(
-    contentId: string,
-    language: Language,
+    id: string,
     data: {
       title?: string;
       content?: string;
@@ -218,7 +219,7 @@ export class HttpContentApi {
     }
   ): Promise<ContentTranslation> {
     const response = await fetch(
-      `${this.baseUrl}/contents/${contentId}/translations/${language}`,
+      `${this.baseUrl}/translations/${id}`,
       {
         method: 'PUT',
         headers: {

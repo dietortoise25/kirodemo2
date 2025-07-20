@@ -101,7 +101,7 @@ export class ContentApi {
   ): Promise<Content | null> {
     try {
       // 如果状态从未发布变为已发布，添加发布时间
-      const updateData = { ...data };
+      const updateData: any = { ...data };
       if (data.published) {
         const currentContent = await prismaService.getContentById(id);
         if (currentContent && !currentContent.published) {
@@ -139,7 +139,9 @@ export class ContentApi {
     contentId: string
   ): Promise<ContentTranslation[]> {
     try {
-      return await prismaService.getContentTranslations(contentId);
+      // 获取所有语言的翻译
+      const content = await prismaService.getContentById(contentId);
+      return content?.translations || [];
     } catch (error) {
       console.error(`获取内容翻译失败 (ContentID: ${contentId}):`, error);
       throw new Error('获取内容翻译失败');
@@ -183,7 +185,17 @@ export class ContentApi {
     }
   ): Promise<ContentTranslation> {
     try {
-      return await prismaService.createContentTranslation(contentId, language, data);
+      return await prismaService.createContentTranslation({
+        contentId,
+        language,
+        title: data.title,
+        content: data.content,
+        seoMetadata: data.seoMetadata || {
+          title: data.title,
+          description: '',
+          keywords: [],
+        },
+      });
     } catch (error) {
       console.error(`创建内容翻译失败 (ContentID: ${contentId}, Language: ${language}):`, error);
       throw new Error('创建内容翻译失败');
