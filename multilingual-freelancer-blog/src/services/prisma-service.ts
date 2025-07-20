@@ -1,5 +1,5 @@
 import prisma from '../lib/prisma';
-import type { Content, ContentTranslation, Language, SeoMetadata } from "../types";
+import type { Language } from "../types";
 
 // 数据库服务类
 export class PrismaService {

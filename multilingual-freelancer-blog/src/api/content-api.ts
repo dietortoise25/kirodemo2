@@ -101,7 +101,7 @@ export class ContentApi {
   ): Promise<Content | null> {
     try {
       // 如果状态从未发布变为已发布，添加发布时间
-      let updateData = { ...data };
+      const updateData = { ...data };
       if (data.published) {
         const currentContent = await prismaService.getContentById(id);
         if (currentContent && !currentContent.published) {

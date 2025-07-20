@@ -12,10 +12,14 @@ if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient();
 } else {
   // 在开发环境中避免创建多个实例
-  if (!(global as any).prisma) {
-    (global as any).prisma = new PrismaClient();
+  const globalForPrisma = globalThis as unknown as {
+    prisma: PrismaClient | undefined;
+  };
+  
+  if (!globalForPrisma.prisma) {
+    globalForPrisma.prisma = new PrismaClient();
   }
-  prisma = (global as any).prisma;
+  prisma = globalForPrisma.prisma;
 }
 
 export default prisma;
