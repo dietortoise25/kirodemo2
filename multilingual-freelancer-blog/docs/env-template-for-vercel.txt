@@ -1,0 +1,15 @@
+# Vercel部署环境变量模板
+# 将此文件中的变量添加到Vercel项目的环境变量设置中
+
+# 数据库连接URL - 替换为您的PostgreSQL数据库连接字符串
+# 例如：postgresql://username:password@hostname:port/database
+DATABASE_URL="postgresql://username:password@hostname:port/database"
+
+# 应用程序设置
+VITE_DEFAULT_LANGUAGE="zh"
+VITE_AVAILABLE_LANGUAGES="zh,en"
+VITE_SITE_NAME="Multilingual Freelancer Blog"
+
+# 其他可能需要的环境变量
+# JWT_SECRET="your_secure_jwt_secret" # 如果您的应用使用JWT认证
+# API_URL="https://your-api-url.com" # 如果您有单独的API服务

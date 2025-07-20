@@ -1,7 +1,7 @@
 import { createContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { useLanguageContext } from '../hooks/useLanguageContext';
-import { ContentApi } from '../api/content-api';
+import { HttpContentApi } from '../api/http-content-api';
 import type { Content, ContentTranslation, Language } from '../types';
 
 interface ContentContextType {
@@ -73,7 +73,7 @@ export function ContentProvider({ children }: ContentProviderProps) {
         setLoading(true);
         setError(null);
         try {
-            const result = await ContentApi.getPaginatedContents(page, pageSize, lang || language);
+            const result = await HttpContentApi.getPaginatedContents(page, pageSize, lang || language);
             setContents(result.contents);
             setPagination({
                 page: result.page,
@@ -93,16 +93,16 @@ export function ContentProvider({ children }: ContentProviderProps) {
         setLoading(true);
         setError(null);
         try {
-            const content = await ContentApi.getContentBySlug(slug);
+            const content = await HttpContentApi.getContentBySlug(slug);
             if (content) {
                 setCurrentContent(content);
 
                 // 设置当前语言的翻译
-                const translation = await ContentApi.getContentTranslation(content.id, language);
+                const translation = await HttpContentApi.getContentTranslation(content.id, language);
                 setCurrentTranslation(translation);
 
                 // 加载相关内容
-                const related = await ContentApi.getRelatedContents(content.id, language);
+                const related = await HttpContentApi.getRelatedContents(content.id, language);
                 setRelatedContents(related);
             } else {
                 setError("Content not found");
@@ -121,11 +121,11 @@ export function ContentProvider({ children }: ContentProviderProps) {
         setLoading(true);
         setError(null);
         try {
-            const translation = await ContentApi.getContentTranslation(currentContent.id, newLanguage);
+            const translation = await HttpContentApi.getContentTranslation(currentContent.id, newLanguage);
             setCurrentTranslation(translation);
 
             // 更新相关内容
-            const related = await ContentApi.getRelatedContents(currentContent.id, newLanguage);
+            const related = await HttpContentApi.getRelatedContents(currentContent.id, newLanguage);
             setRelatedContents(related);
         } catch (err) {
             setError((err as Error).message);
@@ -140,7 +140,7 @@ export function ContentProvider({ children }: ContentProviderProps) {
         setError(null);
         try {
             // 创建内容
-            const newContent = await ContentApi.createContent(
+            const newContent = await HttpContentApi.createContent(
                 data.userId,
                 data.slug,
                 data.defaultLanguage,
@@ -148,7 +148,7 @@ export function ContentProvider({ children }: ContentProviderProps) {
             );
 
             // 创建默认语言的翻译
-            await ContentApi.createContentTranslation(
+            await HttpContentApi.createContentTranslation(
                 newContent.id,
                 data.defaultLanguage,
                 data.title,
@@ -170,7 +170,7 @@ export function ContentProvider({ children }: ContentProviderProps) {
         setLoading(true);
         setError(null);
         try {
-            const content = await ContentApi.updateContent(id, data);
+            const content = await HttpContentApi.updateContent(id, data);
             return content;
         } catch (err) {
             setError((err as Error).message);
@@ -185,7 +185,7 @@ export function ContentProvider({ children }: ContentProviderProps) {
         setLoading(true);
         setError(null);
         try {
-            const success = await ContentApi.deleteContent(id);
+            const success = await HttpContentApi.deleteContent(id);
             return success;
         } catch (err) {
             setError((err as Error).message);

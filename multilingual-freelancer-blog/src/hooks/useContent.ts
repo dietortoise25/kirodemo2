@@ -5,7 +5,7 @@ import type {
   Language,
   SeoMetadata,
 } from "../types";
-import { ContentApi } from "../api/content-api";
+import { HttpContentApi } from "../api/http-content-api";
 import { useLanguageContext } from "./useLanguageContext";
 
 /**
@@ -36,7 +36,7 @@ export function useContent() {
       setLoading(true);
       setError(null);
       try {
-        const result = await ContentApi.getAllPublishedContents(
+        const result = await HttpContentApi.getAllPublishedContents(
           lang || language
         );
         setContents(result);
@@ -60,7 +60,7 @@ export function useContent() {
       setLoading(true);
       setError(null);
       try {
-        const result = await ContentApi.getPaginatedContents(
+        const result = await HttpContentApi.getPaginatedContents(
           page,
           pageSize,
           lang
@@ -89,19 +89,19 @@ export function useContent() {
       setLoading(true);
       setError(null);
       try {
-        const content = await ContentApi.getContentById(id);
+        const content = await HttpContentApi.getContentById(id);
         setCurrentContent(content);
 
         if (content) {
           // 加载当前语言的翻译
-          const translation = await ContentApi.getContentTranslation(
+          const translation = await HttpContentApi.getContentTranslation(
             content.id,
             language
           );
           setCurrentTranslation(translation);
 
           // 加载相关内容
-          const related = await ContentApi.getRelatedContents(
+          const related = await HttpContentApi.getRelatedContents(
             content.id,
             language
           );
@@ -125,19 +125,19 @@ export function useContent() {
       setLoading(true);
       setError(null);
       try {
-        const content = await ContentApi.getContentBySlug(slug);
+        const content = await HttpContentApi.getContentBySlug(slug);
         setCurrentContent(content);
 
         if (content) {
           // 加载当前语言的翻译
-          const translation = await ContentApi.getContentTranslation(
+          const translation = await HttpContentApi.getContentTranslation(
             content.id,
             language
           );
           setCurrentTranslation(translation);
 
           // 加载相关内容
-          const related = await ContentApi.getRelatedContents(
+          const related = await HttpContentApi.getRelatedContents(
             content.id,
             language
           );
@@ -163,14 +163,14 @@ export function useContent() {
       setLoading(true);
       setError(null);
       try {
-        const translation = await ContentApi.getContentTranslation(
+        const translation = await HttpContentApi.getContentTranslation(
           currentContent.id,
           lang
         );
         setCurrentTranslation(translation);
 
         // 更新相关内容
-        const related = await ContentApi.getRelatedContents(
+        const related = await HttpContentApi.getRelatedContents(
           currentContent.id,
           lang
         );
@@ -208,7 +208,7 @@ export function useContent() {
       setError(null);
       try {
         // 创建内容
-        const newContent = await ContentApi.createContent(
+        const newContent = await HttpContentApi.createContent(
           userId,
           slug,
           defaultLanguage,
@@ -216,7 +216,7 @@ export function useContent() {
         );
 
         // 创建默认语言的翻译
-        await ContentApi.createContentTranslation(
+        await HttpContentApi.createContentTranslation(
           newContent.id,
           defaultLanguage,
           title,
@@ -252,7 +252,7 @@ export function useContent() {
       setLoading(true);
       setError(null);
       try {
-        const updatedContent = await ContentApi.updateContent(id, data);
+        const updatedContent = await HttpContentApi.updateContent(id, data);
         if (updatedContent && currentContent?.id === id) {
           setCurrentContent(updatedContent);
         }
@@ -284,7 +284,7 @@ export function useContent() {
       setLoading(true);
       setError(null);
       try {
-        const updatedTranslation = await ContentApi.updateContentTranslation(
+        const updatedTranslation = await HttpContentApi.updateContentTranslation(
           id,
           data
         );
@@ -311,7 +311,7 @@ export function useContent() {
     setLoading(true);
     setError(null);
     try {
-      return await ContentApi.deleteContent(id);
+      return await HttpContentApi.deleteContent(id);
     } catch (err) {
       setError(err instanceof Error ? err.message : "删除内容失败");
       return false;

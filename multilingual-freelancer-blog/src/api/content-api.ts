@@ -4,7 +4,7 @@ import type {
   Language,
   SeoMetadata,
 } from "../types";
-import { ContentService } from "../services/content-service";
+import prismaService from "../services/prisma-service";
 
 /**
  * 内容 API 类
@@ -19,13 +19,12 @@ export class ContentApi {
   public static async getAllPublishedContents(
     language?: Language
   ): Promise<Content[]> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const contents = ContentService.getAllPublishedContents(language);
-        resolve(contents);
-      }, 100);
-    });
+    try {
+      return await prismaService.getAllPublishedContents(language);
+    } catch (error) {
+      console.error('获取内容列表失败:', error);
+      throw new Error('获取内容列表失败');
+    }
   }
 
   /**
@@ -34,13 +33,13 @@ export class ContentApi {
    * @returns Promise<Content | null> 内容对象或null
    */
   public static async getContentById(id: string): Promise<Content | null> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const content = ContentService.getContentById(id);
-        resolve(content || null);
-      }, 100);
-    });
+    try {
+      const content = await prismaService.getContentById(id);
+      return content || null;
+    } catch (error) {
+      console.error(`获取内容失败 (ID: ${id}):`, error);
+      throw new Error('获取内容失败');
+    }
   }
 
   /**
@@ -49,13 +48,13 @@ export class ContentApi {
    * @returns Promise<Content | null> 内容对象或null
    */
   public static async getContentBySlug(slug: string): Promise<Content | null> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const content = ContentService.getContentBySlug(slug);
-        resolve(content || null);
-      }, 100);
-    });
+    try {
+      const content = await prismaService.getContentBySlug(slug);
+      return content || null;
+    } catch (error) {
+      console.error(`获取内容失败 (Slug: ${slug}):`, error);
+      throw new Error('获取内容失败');
+    }
   }
 
   /**
@@ -72,18 +71,18 @@ export class ContentApi {
     defaultLanguage: Language,
     published: boolean = false
   ): Promise<Content> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const content = ContentService.createContent(
-          userId,
-          slug,
-          defaultLanguage,
-          published
-        );
-        resolve(content);
-      }, 100);
-    });
+    try {
+      return await prismaService.createContent({
+        userId,
+        slug,
+        defaultLanguage,
+        published,
+        publishedAt: published ? new Date().toISOString() : null
+      });
+    } catch (error) {
+      console.error('创建内容失败:', error);
+      throw new Error('创建内容失败');
+    }
   }
 
   /**
@@ -100,13 +99,21 @@ export class ContentApi {
       published?: boolean;
     }
   ): Promise<Content | null> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const content = ContentService.updateContent(id, data);
-        resolve(content || null);
-      }, 100);
-    });
+    try {
+      // 如果状态从未发布变为已发布，添加发布时间
+      let updateData = { ...data };
+      if (data.published) {
+        const currentContent = await prismaService.getContentById(id);
+        if (currentContent && !currentContent.published) {
+          updateData.publishedAt = new Date().toISOString();
+        }
+      }
+      
+      return await prismaService.updateContent(id, updateData);
+    } catch (error) {
+      console.error(`更新内容失败 (ID: ${id}):`, error);
+      throw new Error('更新内容失败');
+    }
   }
 
   /**
@@ -115,13 +122,12 @@ export class ContentApi {
    * @returns Promise<boolean> 是否删除成功
    */
   public static async deleteContent(id: string): Promise<boolean> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const result = ContentService.deleteContent(id);
-        resolve(result);
-      }, 100);
-    });
+    try {
+      return await prismaService.deleteContent(id);
+    } catch (error) {
+      console.error(`删除内容失败 (ID: ${id}):`, error);
+      throw new Error('删除内容失败');
+    }
   }
 
   /**
@@ -132,13 +138,12 @@ export class ContentApi {
   public static async getContentTranslations(
     contentId: string
   ): Promise<ContentTranslation[]> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const translations = ContentService.getContentTranslations(contentId);
-        resolve(translations);
-      }, 100);
-    });
+    try {
+      return await prismaService.getContentTranslations(contentId);
+    } catch (error) {
+      console.error(`获取内容翻译失败 (ContentID: ${contentId}):`, error);
+      throw new Error('获取内容翻译失败');
+    }
   }
 
   /**
@@ -151,16 +156,12 @@ export class ContentApi {
     contentId: string,
     language: Language
   ): Promise<ContentTranslation | null> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const translation = ContentService.getContentTranslation(
-          contentId,
-          language
-        );
-        resolve(translation || null);
-      }, 100);
-    });
+    try {
+      return await prismaService.getContentTranslation(contentId, language);
+    } catch (error) {
+      console.error(`获取内容翻译失败 (ContentID: ${contentId}, Language: ${language}):`, error);
+      throw new Error('获取内容翻译失败');
+    }
   }
 
   /**
@@ -175,23 +176,18 @@ export class ContentApi {
   public static async createContentTranslation(
     contentId: string,
     language: Language,
-    title: string,
-    content: string,
-    seoMetadata: SeoMetadata
+    data: {
+      title: string;
+      content: string;
+      seoMetadata?: SeoMetadata;
+    }
   ): Promise<ContentTranslation> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const translation = ContentService.createContentTranslation(
-          contentId,
-          language,
-          title,
-          content,
-          seoMetadata
-        );
-        resolve(translation);
-      }, 100);
-    });
+    try {
+      return await prismaService.createContentTranslation(contentId, language, data);
+    } catch (error) {
+      console.error(`创建内容翻译失败 (ContentID: ${contentId}, Language: ${language}):`, error);
+      throw new Error('创建内容翻译失败');
+    }
   }
 
   /**
@@ -208,13 +204,12 @@ export class ContentApi {
       seoMetadata?: SeoMetadata;
     }
   ): Promise<ContentTranslation | null> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const translation = ContentService.updateContentTranslation(id, data);
-        resolve(translation || null);
-      }, 100);
-    });
+    try {
+      return await prismaService.updateContentTranslation(id, data);
+    } catch (error) {
+      console.error(`更新内容翻译失败 (ID: ${id}):`, error);
+      throw new Error('更新内容翻译失败');
+    }
   }
 
   /**
@@ -223,13 +218,12 @@ export class ContentApi {
    * @returns Promise<boolean> 是否删除成功
    */
   public static async deleteContentTranslation(id: string): Promise<boolean> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const result = ContentService.deleteContentTranslation(id);
-        resolve(result);
-      }, 100);
-    });
+    try {
+      return await prismaService.deleteContentTranslation(id);
+    } catch (error) {
+      console.error(`删除内容翻译失败 (ID: ${id}):`, error);
+      throw new Error('删除内容翻译失败');
+    }
   }
 
   /**
@@ -244,17 +238,12 @@ export class ContentApi {
     language: Language,
     limit: number = 3
   ): Promise<Content[]> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const relatedContents = ContentService.getRelatedContents(
-          contentId,
-          language,
-          limit
-        );
-        resolve(relatedContents);
-      }, 100);
-    });
+    try {
+      return await prismaService.getRelatedContents(contentId, language, limit);
+    } catch (error) {
+      console.error(`获取相关内容失败 (ContentID: ${contentId}, Language: ${language}):`, error);
+      throw new Error('获取相关内容失败');
+    }
   }
 
   /**
@@ -274,22 +263,11 @@ export class ContentApi {
     page: number;
     pageSize: number;
   }> {
-    // 模拟异步 API 调用
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const allContents = ContentService.getAllPublishedContents(language);
-        const total = allContents.length;
-        const start = (page - 1) * pageSize;
-        const end = start + pageSize;
-        const contents = allContents.slice(start, end);
-
-        resolve({
-          contents,
-          total,
-          page,
-          pageSize,
-        });
-      }, 100);
-    });
+    try {
+      return await prismaService.getPaginatedContents(page, pageSize, language);
+    } catch (error) {
+      console.error(`获取分页内容失败 (Page: ${page}, PageSize: ${pageSize}):`, error);
+      throw new Error('获取分页内容失败');
+    }
   }
 }
