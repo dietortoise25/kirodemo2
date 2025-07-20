@@ -7,7 +7,7 @@ import { Input } from '../../components/ui/input';
 import { Card } from '../../components/ui/card';
 import { ArrowLeft, Save, Eye, EyeOff } from 'lucide-react';
 import { useContent } from '../../hooks/useContent';
-import type { Content, ContentTranslation } from '../../types';
+import type { Content } from '../../types';
 
 interface ContentFormData {
     title: string;
@@ -21,7 +21,7 @@ export function ContentEditPage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const isEditing = id !== 'new';
-    const { contents, loading, loadContentById } = useContent();
+    const { contents, loadContentById } = useContent();
     const [isPreview, setIsPreview] = useState(false);
     const [formData, setFormData] = useState<ContentFormData>({
         title: '',

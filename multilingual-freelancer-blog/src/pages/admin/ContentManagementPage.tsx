@@ -6,7 +6,7 @@ import { Card } from '../../components/ui/card';
 import { Input } from '../../components/ui/input';
 import { Plus, Search, Edit, Trash } from 'lucide-react';
 import { useContent } from '../../hooks/useContent';
-import type { Content } from '../../types';
+
 
 export function ContentManagementPage() {
     const { t } = useTranslation('admin');

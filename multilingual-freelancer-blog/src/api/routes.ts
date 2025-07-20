@@ -184,12 +184,7 @@ export class ApiRoutes {
 
   private static async handleUpdateContentTranslation(contentId: string, language: Language, request: Request): Promise<Response> {
     const data = await request.json();
-    // 首先获取翻译ID
-    const existingTranslation = await ContentApi.getContentTranslation(contentId, language);
-    if (!existingTranslation) {
-      return new Response('Translation not found', { status: 404 });
-    }
-    const translation = await ContentApi.updateContentTranslation(existingTranslation.id, data);
+    const translation = await ContentApi.updateContentTranslation(contentId, language, data);
     return new Response(JSON.stringify(translation), {
       headers: { 'Content-Type': 'application/json' }
     });
@@ -203,12 +198,7 @@ export class ApiRoutes {
   }
 
   private static async handleDeleteContentTranslation(contentId: string, language: Language): Promise<Response> {
-    // 首先获取翻译ID
-    const existingTranslation = await ContentApi.getContentTranslation(contentId, language);
-    if (!existingTranslation) {
-      return new Response('Translation not found', { status: 404 });
-    }
-    const success = await ContentApi.deleteContentTranslation(existingTranslation.id);
+    const success = await ContentApi.deleteContentTranslation(contentId, language);
     return new Response(JSON.stringify({ success }), {
       headers: { 'Content-Type': 'application/json' }
     });
