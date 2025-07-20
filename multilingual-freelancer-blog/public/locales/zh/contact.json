@@ -1,0 +1,26 @@
+{
+  "title": "联系我",
+  "description": "有项目合作或其他问题？欢迎联系我。",
+  "form": {
+    "name": "姓名",
+    "email": "邮箱",
+    "subject": "主题",
+    "message": "消息",
+    "send": "发送消息",
+    "sending": "发送中...",
+    "sent": "消息已发送",
+    "error": "发送失败，请重试"
+  },
+  "info": {
+    "email": "邮箱",
+    "phone": "电话",
+    "location": "位置",
+    "availability": "可用性"
+  },
+  "social": {
+    "title": "社交媒体",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "twitter": "Twitter"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "自动代码检查",
+  "description": "每完成一个小功能后自动运行 pnpm lint 检查代码质量和规范",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "multilingual-freelancer-blog/src/**/*.ts",
+      "multilingual-freelancer-blog/src/**/*.tsx",
+      "multilingual-freelancer-blog/src/**/*.js",
+      "multilingual-freelancer-blog/src/**/*.jsx"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "检测到源代码文件发生变化。请运行 `pnpm lint` 命令检查代码质量和规范，确保代码符合项目的 ESLint 配置要求。如果发现任何问题，请提供修复建议。"
+  }
+}

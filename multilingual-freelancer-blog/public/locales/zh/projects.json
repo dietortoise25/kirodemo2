@@ -1,0 +1,21 @@
+{
+  "title": "项目",
+  "description": "查看我的最新项目和作品集。",
+  "viewProject": "查看项目",
+  "viewCode": "查看代码",
+  "viewLive": "在线预览",
+  "technologies": "技术栈",
+  "completedOn": "完成于",
+  "status": {
+    "completed": "已完成",
+    "inProgress": "进行中",
+    "planned": "计划中"
+  },
+  "category": {
+    "web": "网站开发",
+    "mobile": "移动应用",
+    "desktop": "桌面应用",
+    "other": "其他"
+  },
+  "noProjects": "暂无项目。"
+}

@@ -1,0 +1,53 @@
+{
+  "siteName": "Multilingual Freelancer Blog",
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "create": "Create",
+  "update": "Update",
+  "search": "Search",
+  "filter": "Filter",
+  "sort": "Sort",
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact Us"
+  },
+  "theme": {
+    "light": "Light Mode",
+    "dark": "Dark Mode",
+    "system": "System"
+  },
+  "language": {
+    "zh": "中文",
+    "en": "English",
+    "ja": "日本語",
+    "es": "Español",
+    "fr": "Français"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "login": {
+    "title": "Login",
+    "description": "Login to access the admin dashboard",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Login",
+    "error": "Invalid email or password"
+  }
+}

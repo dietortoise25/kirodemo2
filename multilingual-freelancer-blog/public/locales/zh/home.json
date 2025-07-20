@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "多语言自由职业者博客",
+    "description": "这是一个为自由职业程序员设计的多语言个人博客系统，支持多种语言界面和内容。",
+    "learnMore": "了解更多",
+    "contactMe": "联系我"
+  },
+  "features": {
+    "title": "特色功能",
+    "description": "探索这个多语言博客系统的强大功能",
+    "multilingual": {
+      "title": "多语言支持",
+      "subtitle": "支持多种语言界面和内容",
+      "description": "系统支持英语、中文、日语、西班牙语和法语五种语言，让您能够面向全球市场提供服务。"
+    },
+    "projects": {
+      "title": "项目展示",
+      "subtitle": "展示您的技能和项目",
+      "description": "创建精美的项目展示页面，上传多张图片、添加项目描述、技术栈标签和项目链接。"
+    },
+    "jobInvites": {
+      "title": "工作邀请",
+      "subtitle": "接收潜在客户的工作邀请",
+      "description": "通过内置的联系表单接收工作邀请和消息，系统会自动检测消息语言并提供翻译选项。"
+    }
+  },
+  "demo": {
+    "title": "互动演示",
+    "description": "尝试点击下面的按钮，体验交互效果",
+    "counter": {
+      "title": "计数器演示",
+      "subtitle": "点击按钮增加计数",
+      "button": "增加计数"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "任务完成测试邀请",
+  "description": "完成小任务后，主动邀请用户查看浏览器并测试相关功能",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "multilingual-freelancer-blog/src/**/*.tsx",
+      "multilingual-freelancer-blog/src/**/*.ts",
+      "multilingual-freelancer-blog/src/**/*.css",
+      "multilingual-freelancer-blog/index.html",
+      "multilingual-freelancer-blog/package.json"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "我刚刚完成了一个小任务的开发工作。请主动邀请用户在浏览器中查看和测试相关功能。具体说明：1) 简要描述刚完成的功能或修改；2) 建议用户如何在浏览器中测试这些功能；3) 提供具体的测试步骤或需要关注的要点；4) 询问用户是否需要进一步的调整或优化。请用友好和专业的语调进行邀请。"
+  }
+}

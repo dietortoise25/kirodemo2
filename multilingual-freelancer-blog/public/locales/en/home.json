@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "Multilingual Freelancer Blog",
+    "description": "This is a multilingual personal blog system designed for freelance programmers, supporting multiple language interfaces and content.",
+    "learnMore": "Learn More",
+    "contactMe": "Contact Me"
+  },
+  "features": {
+    "title": "Featured Functions",
+    "description": "Explore the powerful features of this multilingual blog system",
+    "multilingual": {
+      "title": "Multilingual Support",
+      "subtitle": "Support for multiple language interfaces and content",
+      "description": "The system supports five languages: English, Chinese, Japanese, Spanish, and French, allowing you to serve global markets."
+    },
+    "projects": {
+      "title": "Project Showcase",
+      "subtitle": "Showcase your skills and projects",
+      "description": "Create beautiful project showcase pages, upload multiple images, add project descriptions, tech stack tags, and project links."
+    },
+    "jobInvites": {
+      "title": "Job Invitations",
+      "subtitle": "Receive job invitations from potential clients",
+      "description": "Receive job invitations and messages through the built-in contact form, the system will automatically detect message language and provide translation options."
+    }
+  },
+  "demo": {
+    "title": "Interactive Demo",
+    "description": "Try clicking the button below to experience the interaction",
+    "counter": {
+      "title": "Counter Demo",
+      "subtitle": "Click the button to increase the count",
+      "button": "Increase Count"
+    }
+  }
+}

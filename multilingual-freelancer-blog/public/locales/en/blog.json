@@ -1,0 +1,28 @@
+{
+  "title": "Blog",
+  "description": "Read my latest articles and thoughts on programming, design, and freelancing.",
+  "readMore": "Read More",
+  "noContent": "No articles found.",
+  "filter": {
+    "language": "Language",
+    "allLanguages": "All Languages",
+    "perPage": "Per Page"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "relatedPosts": "Related Posts",
+  "publishedOn": "Published on",
+  "backToBlog": "Back to Blog",
+  "shareArticle": "Share Article",
+  "languageVersions": "Language Versions",
+  "availableIn": "Available in",
+  "readingTime": "Reading time",
+  "minutes": "minutes",
+  "tags": "Tags",
+  "category": "Category",
+  "lastUpdated": "Last updated",
+  "tableOfContents": "Table of Contents",
+  "languageNotAvailable": "This article is not available in {{language}}"
+}

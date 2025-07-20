@@ -1,0 +1,53 @@
+{
+  "siteName": "多语言自由职业者博客",
+  "loading": "加载中...",
+  "error": "错误",
+  "success": "成功",
+  "cancel": "取消",
+  "confirm": "确认",
+  "save": "保存",
+  "delete": "删除",
+  "edit": "编辑",
+  "create": "创建",
+  "update": "更新",
+  "search": "搜索",
+  "filter": "筛选",
+  "sort": "排序",
+  "nav": {
+    "home": "首页",
+    "blog": "博客",
+    "projects": "项目",
+    "about": "关于",
+    "contact": "联系"
+  },
+  "footer": {
+    "rights": "版权所有",
+    "privacy": "隐私政策",
+    "terms": "使用条款",
+    "contact": "联系我们"
+  },
+  "theme": {
+    "light": "浅色模式",
+    "dark": "深色模式",
+    "system": "跟随系统"
+  },
+  "language": {
+    "zh": "中文",
+    "en": "English",
+    "ja": "日本語",
+    "es": "Español",
+    "fr": "Français"
+  },
+  "pagination": {
+    "previous": "上一页",
+    "next": "下一页"
+  },
+  "login": {
+    "title": "登录",
+    "description": "登录以访问管理后台",
+    "email": "邮箱",
+    "password": "密码",
+    "submit": "登录",
+    "error": "邮箱或密码错误"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Projects",
+  "description": "Check out my latest projects and portfolio.",
+  "viewProject": "View Project",
+  "viewCode": "View Code",
+  "viewLive": "Live Preview",
+  "technologies": "Technologies",
+  "completedOn": "Completed on",
+  "status": {
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "planned": "Planned"
+  },
+  "category": {
+    "web": "Web Development",
+    "mobile": "Mobile App",
+    "desktop": "Desktop App",
+    "other": "Other"
+  },
+  "noProjects": "No projects available."
+}
