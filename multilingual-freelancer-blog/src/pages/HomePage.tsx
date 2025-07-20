@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
+import { Settings } from 'lucide-react';
 
 /**
  * 首页组件
@@ -26,6 +28,12 @@ export function HomePage() {
                         <div className="space-x-4">
                             <Button>{t('home:hero.learnMore')}</Button>
                             <Button variant="outline">{t('home:hero.contactMe')}</Button>
+                            <Link to="/admin">
+                                <Button variant="secondary" size="sm" className="ml-4">
+                                    <Settings className="w-4 h-4 mr-2" />
+                                    管理后台
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>

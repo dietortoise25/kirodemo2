@@ -9,11 +9,11 @@ export function Footer() {
 
     return (
         <footer className="border-t bg-background">
-            <div className="container flex flex-col md:flex-row items-center justify-between py-8">
-                <div className="text-sm text-muted-foreground">
+            <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-8">
+                <div className="text-sm text-muted-foreground text-center md:text-left">
                     &copy; {currentYear} {t('common:siteName')}. {t('common:footer.rights')}
                 </div>
-                <div className="flex items-center gap-4 mt-4 md:mt-0">
+                <div className="flex items-center gap-4 mt-4 md:mt-0 justify-center md:justify-end">
                     <a
                         href="#"
                         className="text-sm text-muted-foreground hover:text-foreground"
