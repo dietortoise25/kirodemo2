@@ -3,9 +3,10 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/static-build",
+      "use": "@vercel/node",
       "config": {
-        "distDir": "dist"
+        "buildCommand": "pnpm vercel-build",
+        "outputDirectory": "dist"
       }
     }
   ],
@@ -15,15 +16,20 @@
       "dest": "/assets/$1"
     },
     {
-      "src": "/(.+)",
-      "dest": "/"
+      "src": "/(.+\\.[a-zA-Z0-9]+)$",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/"
+      "dest": "/index.html"
     }
   ],
   "github": {
     "silent": true
+  },
+  "env": {
+    "VITE_DEFAULT_LANGUAGE": "zh",
+    "VITE_AVAILABLE_LANGUAGES": "zh,en",
+    "VITE_SITE_NAME": "Multilingual Freelancer Blog"
   }
 } 

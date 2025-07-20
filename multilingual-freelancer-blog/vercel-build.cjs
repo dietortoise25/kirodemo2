@@ -18,32 +18,24 @@ if (missingEnvVars.length > 0) {
 
   // 创建临时.env文件用于构建
   const envContent = `
-    VITE_JWT_SECRET=${process.env.VITE_JWT_SECRET || "development_jwt_secret"}
-    VITE_DEFAULT_LANGUAGE=${process.env.VITE_DEFAULT_LANGUAGE || "zh"}
-    VITE_AVAILABLE_LANGUAGES=${process.env.VITE_AVAILABLE_LANGUAGES || "zh,en"}
-    VITE_SITE_NAME=${
-      process.env.VITE_SITE_NAME || "Multilingual Freelancer Blog"
-    }
-  `;
+VITE_JWT_SECRET=${process.env.VITE_JWT_SECRET || "development_jwt_secret"}
+VITE_DEFAULT_LANGUAGE=${process.env.VITE_DEFAULT_LANGUAGE || "zh"}
+VITE_AVAILABLE_LANGUAGES=${process.env.VITE_AVAILABLE_LANGUAGES || "zh,en"}
+VITE_SITE_NAME=${process.env.VITE_SITE_NAME || "Multilingual Freelancer Blog"}
+  `.trim();
 
-  fs.writeFileSync(".env.production", envContent.trim());
+  fs.writeFileSync(".env.production", envContent);
   console.log("已创建临时环境变量文件");
 }
 
 // 执行构建
 try {
   console.log("开始构建...");
+  console.log("执行 tsc -b && vite build");
 
-  // 使用pnpm或npm构建
-  if (fs.existsSync("pnpm-lock.yaml")) {
-    console.log("使用pnpm构建...");
-    execSync("pnpm install --frozen-lockfile", { stdio: "inherit" });
-    execSync("pnpm build", { stdio: "inherit" });
-  } else {
-    console.log("使用npm构建...");
-    execSync("npm ci", { stdio: "inherit" });
-    execSync("npm run build", { stdio: "inherit" });
-  }
+  // 执行TypeScript编译和Vite构建
+  execSync("npx tsc -b", { stdio: "inherit" });
+  execSync("npx vite build", { stdio: "inherit" });
 
   console.log("构建完成!");
 } catch (error) {
