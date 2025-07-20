@@ -1,27 +1,57 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
 import { Card } from '../../components/ui/card';
 import { Input } from '../../components/ui/input';
 import { Plus, Search, Edit, Trash } from 'lucide-react';
+import { useContent } from '../../hooks/useContent';
+import type { Content } from '../../types';
 
 export function ContentManagementPage() {
     const { t } = useTranslation('admin');
     const [searchQuery, setSearchQuery] = useState('');
+    const { contents, loading, loadAllContents } = useContent();
 
-    // 模拟数据，实际应用中应从API获取
-    const posts = [
-        { id: 1, title: 'Getting Started with React', status: 'published', date: '2023-10-15' },
-        { id: 2, title: 'Advanced TypeScript Tips', status: 'published', date: '2023-09-28' },
-        { id: 3, title: 'CSS Grid Layout Tutorial', status: 'draft', date: '2023-10-05' },
-        { id: 4, title: 'State Management in React', status: 'published', date: '2023-08-22' },
-        { id: 5, title: 'Responsive Design Principles', status: 'draft', date: '2023-10-10' },
-    ];
+    useEffect(() => {
+        loadAllContents();
+    }, [loadAllContents]);
+
+    const handleDelete = async (contentId: string) => {
+        if (window.confirm(t('confirmDelete'))) {
+            try {
+                const response = await fetch(`/api/contents/${contentId}`, {
+                    method: 'DELETE',
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to delete content');
+                }
+                
+                // 重新加载内容列表
+                loadAllContents();
+            } catch (error) {
+                console.error('删除失败:', error);
+                alert(t('deleteFailed'));
+            }
+        }
+    };
 
     const filteredPosts = searchQuery
-        ? posts.filter(post => post.title.toLowerCase().includes(searchQuery.toLowerCase()))
-        : posts;
+        ? contents.filter(content => 
+            content.translations.some(translation => 
+                translation.title.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+          )
+        : contents;
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="text-muted-foreground">{t('loading')}</div>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">
@@ -65,32 +95,43 @@ export function ContentManagementPage() {
                             </thead>
                             <tbody>
                                 {filteredPosts.length > 0 ? (
-                                    filteredPosts.map((post) => (
-                                        <tr key={post.id} className="border-b transition-colors hover:bg-muted/50">
-                                            <td className="p-4 align-middle">{post.title}</td>
-                                            <td className="p-4 align-middle hidden md:table-cell">
-                                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${post.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                    filteredPosts.map((content) => {
+                                        const primaryTranslation = content.translations[0];
+                                        const title = primaryTranslation?.title || t('untitled');
+                                        return (
+                                            <tr key={content.id} className="border-b transition-colors hover:bg-muted/50">
+                                                <td className="p-4 align-middle">{title}</td>
+                                                <td className="p-4 align-middle hidden md:table-cell">
+                                                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                                                        content.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                                                     }`}>
-                                                    {post.status === 'published' ? t('published') : t('draft')}
-                                                </span>
-                                            </td>
-                                            <td className="p-4 align-middle hidden md:table-cell">{post.date}</td>
-                                            <td className="p-4 align-middle text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <Link to={`/admin/content/${post.id}`}>
-                                                        <Button size="icon" variant="ghost">
-                                                            <Edit className="h-4 w-4" />
-                                                            <span className="sr-only">{t('edit')}</span>
+                                                        {content.published ? t('published') : t('draft')}
+                                                    </span>
+                                                </td>
+                                                <td className="p-4 align-middle hidden md:table-cell">
+                                                    {new Date(content.createdAt).toLocaleDateString()}
+                                                </td>
+                                                <td className="p-4 align-middle text-right">
+                                                    <div className="flex justify-end gap-2">
+                                                        <Link to={`/admin/content/${content.id}`}>
+                                                            <Button size="icon" variant="ghost">
+                                                                <Edit className="h-4 w-4" />
+                                                                <span className="sr-only">{t('edit')}</span>
+                                                            </Button>
+                                                        </Link>
+                                                        <Button 
+                                                            size="icon" 
+                                                            variant="ghost"
+                                                            onClick={() => handleDelete(content.id)}
+                                                        >
+                                                            <Trash className="h-4 w-4" />
+                                                            <span className="sr-only">{t('delete')}</span>
                                                         </Button>
-                                                    </Link>
-                                                    <Button size="icon" variant="ghost">
-                                                        <Trash className="h-4 w-4" />
-                                                        <span className="sr-only">{t('delete')}</span>
-                                                    </Button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
                                 ) : (
                                     <tr>
                                         <td colSpan={4} className="p-4 text-center text-muted-foreground">
@@ -105,4 +146,4 @@ export function ContentManagementPage() {
             </Card>
         </div>
     );
-} 
+}

@@ -3,7 +3,7 @@ import cors from 'cors';
 import { ContentApi } from './src/api/content-api.ts';
 
 const app = express();
-const PORT = 3002;
+const PORT = 3003;
 
 // 中间件
 app.use(cors());
@@ -118,9 +118,11 @@ app.post('/api/contents/:id/translations', async (req, res) => {
     const translation = await ContentApi.createContentTranslation(
       req.params.id,
       language,
-      title,
-      content,
-      seoMetadata
+      {
+        title,
+        content,
+        seoMetadata
+      }
     );
     res.status(201).json(translation);
   } catch (error) {

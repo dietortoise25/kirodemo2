@@ -52,5 +52,13 @@
     "password": "密码",
     "submit": "登录",
     "error": "用户名或密码无效"
-  }
-} 
+  },
+  "confirmDelete": "确定要删除这篇文章吗？",
+  "deleteFailed": "删除失败，请重试",
+  "saving": "保存中...",
+  "saveFailed": "保存失败，请重试",
+  "loading": "加载中...",
+  "untitled": "无标题",
+  "create": "创建",
+  "update": "更新"
+}

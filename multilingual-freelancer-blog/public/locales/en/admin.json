@@ -52,5 +52,13 @@
     "password": "Password",
     "submit": "Login",
     "error": "Invalid username or password"
-  }
-} 
+  },
+  "confirmDelete": "Are you sure you want to delete this post?",
+  "deleteFailed": "Failed to delete, please try again",
+  "saving": "Saving...",
+  "saveFailed": "Failed to save, please try again",
+  "loading": "Loading...",
+  "untitled": "Untitled",
+  "create": "Create",
+  "update": "Update"
+}

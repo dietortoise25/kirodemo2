@@ -6,6 +6,8 @@ import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Card } from '../../components/ui/card';
 import { ArrowLeft, Save, Eye, EyeOff } from 'lucide-react';
+import { useContent } from '../../hooks/useContent';
+import type { Content, ContentTranslation } from '../../types';
 
 interface ContentFormData {
     title: string;
@@ -18,6 +20,8 @@ export function ContentEditPage() {
     const { t, i18n } = useTranslation('admin');
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const isEditing = id !== 'new';
+    const { contents, loading, loadContentById } = useContent();
     const [isPreview, setIsPreview] = useState(false);
     const [formData, setFormData] = useState<ContentFormData>({
         title: '',
@@ -26,21 +30,29 @@ export function ContentEditPage() {
         status: 'draft'
     });
 
-    // 模拟从API加载数据
+    const [saving, setSaving] = useState(false);
+    const [currentContent, setCurrentContent] = useState<Content | null>(null);
+
     useEffect(() => {
-        if (id && id !== 'new') {
-            // 这里应该从API获取数据
-            // 模拟异步加载
-            setTimeout(() => {
-                setFormData({
-                    title: '示例文章标题',
-                    content: '# 示例文章内容\n\n这是一个示例文章，用于测试Markdown编辑器。\n\n## 二级标题\n\n- 列表项1\n- 列表项2\n- 列表项3\n\n```js\nconsole.log("Hello World");\n```',
-                    language: 'zh',
-                    status: 'draft'
-                });
-            }, 500);
+        if (isEditing && id) {
+            const content = contents.find(c => c.id === id);
+            if (content) {
+                setCurrentContent(content);
+                const translation = content.translations.find(t => t.language === formData.language) || content.translations[0];
+                if (translation) {
+                    setFormData({
+                        title: translation.title,
+                        content: translation.content,
+                        language: translation.language,
+                        status: content.published ? 'published' : 'draft'
+                    });
+                }
+            } else {
+                // 如果内容不在当前列表中，尝试加载
+                loadContentById(id);
+            }
         }
-    }, [id]);
+    }, [id, isEditing, contents, formData.language, loadContentById]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -51,14 +63,91 @@ export function ContentEditPage() {
         setFormData(prev => ({ ...prev, content: value || '' }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // 这里应该调用API保存数据
-        console.log('保存内容:', formData);
-
-        // 模拟保存成功后返回列表页
-        // navigate('/admin/content');
+        setSaving(true);
+        
+        try {
+            if (isEditing && id) {
+                // 更新现有内容
+                const response = await fetch(`/api/contents/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        published: formData.status === 'published'
+                    }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to update content');
+                }
+                
+                // 更新翻译
+                const translation = currentContent?.translations.find(t => t.language === formData.language);
+                if (translation) {
+                    const translationResponse = await fetch(`/api/contents/${id}/translations/${translation.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            title: formData.title,
+                            content: formData.content
+                        }),
+                    });
+                    
+                    if (!translationResponse.ok) {
+                        throw new Error('Failed to update translation');
+                    }
+                }
+            } else {
+                // 创建新内容
+                const contentResponse = await fetch('/api/contents', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: 'admin', // 临时硬编码
+                        slug: formData.title.toLowerCase().replace(/\s+/g, '-'),
+                        defaultLanguage: formData.language,
+                        published: formData.status === 'published'
+                    }),
+                });
+                
+                if (!contentResponse.ok) {
+                    throw new Error('Failed to create content');
+                }
+                
+                const newContent = await contentResponse.json();
+                
+                // 创建翻译
+                const translationResponse = await fetch(`/api/contents/${newContent.id}/translations`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        language: formData.language,
+                        title: formData.title,
+                        content: formData.content
+                    }),
+                });
+                
+                if (!translationResponse.ok) {
+                    throw new Error('Failed to create translation');
+                }
+            }
+            
+            navigate('/admin/content');
+        } catch (error) {
+            console.error('保存失败:', error);
+            alert(t('saveFailed'));
+        } finally {
+            setSaving(false);
+        }
     };
 
     return (
@@ -167,12 +256,12 @@ export function ContentEditPage() {
                     <Button type="button" variant="outline" onClick={() => navigate('/admin/content')}>
                         {t('cancel')}
                     </Button>
-                    <Button type="submit">
+                    <Button type="submit" disabled={saving}>
                         <Save className="h-4 w-4 mr-2" />
-                        {t('save')}
+                        {saving ? t('saving') : (isEditing ? t('update') : t('create'))}
                     </Button>
                 </div>
             </form>
         </div>
     );
-} 
+}
